@@ -13,13 +13,13 @@ package Exercicio02;
 public class Fila {
 
     // atributos
-    private Object[] dados;
+    private final Object[] dados;
     private int inicio;
     private int fim;
 
     // construtor
     public Fila() {
-        dados = new Object[50];
+        dados = new Object[52];
         inicio = 0;
         fim = 0;
 
