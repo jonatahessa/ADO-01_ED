@@ -122,31 +122,62 @@ public class GuerraDeCartas {
     }
 
     static int jogar() {
-        int contaRodadas = 0, contaEmpates = 0;
+        int contaRodadas = 0, contaEmpates = 0, valor1, valor2;
         Pilha cartasJogador1 = new Pilha();
         Pilha cartasJogador2 = new Pilha();
-        
-        while (!baralhoJogador1.isEmpty() || !baralhoJogador2.isEmpty()) {
+
+        do {
             cartasJogador1.push(baralhoJogador1.dequeue());
             cartasJogador2.push(baralhoJogador2.dequeue());
-            int valor1 = conversaoCartas(cartasJogador1.top());
-            int valor2 = conversaoCartas(cartasJogador2.top());
-            System.out.println("Valor 1 = " + valor1);
-            System.out.println("Valor 2 = " + valor2);
-            
-            if (valor1 == valor2) {
-                for (int i = 0; i < 2; i++) {
-                    if (!baralhoJogador1.isEmpty() && !baralhoJogador2.isEmpty()) {
-                        cartasJogador1.push(baralhoJogador1.dequeue());
-                        cartasJogador2.push(baralhoJogador2.dequeue());
-                    } else {
-                        return 0;
-                    }
-                }
+
+            if (cartasJogador1.top() != null) {
+                valor1 = conversaoCartas(cartasJogador1.top());
+                System.out.println("V1 " + valor1);
+            } else {
+                System.out.println("O jogador 1 venceu depois de " + contaRodadas + " rodadas e " + contaEmpates + " empates!");
+                return 0;
+            }
+
+            if (cartasJogador2.top() != null) {
+                valor2 = conversaoCartas(cartasJogador2.top());
+                System.out.println("V2 " + valor2);
+            } else {
+                System.out.println("O jogador 2 venceu depois de " + contaRodadas + " rodadas e " + contaEmpates + " empates!");
+                return 0;
+            }
+
+            while (valor1 == valor2) {
                 System.out.println("Empate!");
+                for (int i = 0; i < 2; i++) {
+                    cartasJogador1.push(baralhoJogador1.dequeue());
+                    cartasJogador2.push(baralhoJogador2.dequeue());
+                }
+                valor1 = conversaoCartas(cartasJogador1.top());
+                valor2 = conversaoCartas(cartasJogador2.top());
                 contaEmpates++;
                 contaRodadas++;
-            } else if (valor1 > valor2) {
+
+                if (valor1 > valor2) {
+                    while (!cartasJogador1.isEmpty()) {
+                        baralhoJogador1.enqueue(cartasJogador1.pop());
+                    }
+                    while (!cartasJogador2.isEmpty()) {
+                        baralhoJogador1.enqueue(cartasJogador2.pop());
+                    }
+                    System.out.println("Ponto Jogador 1");
+                    contaRodadas++;
+                } else if (valor1 < valor2) {
+                    while (!cartasJogador1.isEmpty()) {
+                        baralhoJogador2.enqueue(cartasJogador1.pop());
+                    }
+                    while (!cartasJogador2.isEmpty()) {
+                        baralhoJogador2.enqueue(cartasJogador2.pop());
+                    }
+                    System.out.println("Ponto Jogador 2");
+                    contaRodadas++;
+                }
+            }
+            if (valor1 > valor2) {
                 while (!cartasJogador1.isEmpty()) {
                     baralhoJogador1.enqueue(cartasJogador1.pop());
                 }
@@ -165,13 +196,8 @@ public class GuerraDeCartas {
                 System.out.println("Ponto Jogador 2");
                 contaRodadas++;
             }
-        }
+        } while (!baralhoJogador1.isEmpty() || !baralhoJogador2.isEmpty());
 
-        if (cartasJogador1.isFull()) {
-            System.out.println("O jogador 1 venceu, depois de " + contaRodadas + " rodadas e " + contaEmpates + "!");
-        } else if (cartasJogador2.isFull()) {
-            System.out.println("O jogador 2 venceu, depois de " + contaRodadas + " rodadas e " + contaEmpates + "!");
-        }
         return 1;
     }
 

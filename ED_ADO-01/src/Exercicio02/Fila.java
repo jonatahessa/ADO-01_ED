@@ -52,6 +52,7 @@ public class Fila {
             }
             return x;
         }
+        System.out.println("Acabou as cartas!");
         return null;
     }
 }
